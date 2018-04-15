@@ -25,6 +25,7 @@ public class bulletMove : MonoBehaviour {
         sparks = GameObject.FindGameObjectsWithTag("sparks");
         explosion = GameObject.FindGameObjectsWithTag("explosion");
         delay = GameObject.FindGameObjectsWithTag("delay");
+        transform.Rotate(0f, 90f, 90f);
 
     }
 
@@ -39,7 +40,7 @@ public class bulletMove : MonoBehaviour {
     }
 
     void FixedUpdate () {
-        transform.Translate(Vector3.up * bulletSpeed * Time.deltaTime);
+        transform.Translate(Vector3.right * bulletSpeed * Time.deltaTime);
 	}
 
     private void OnTriggerStay(Collider other)

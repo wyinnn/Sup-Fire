@@ -9,6 +9,7 @@ public class MissileMove : MonoBehaviour {
     public float bulletSpeed;
     public float initialSpeed;
     public float rotateSpeed;
+    public float delayTime;
 
     public GameObject comeFrom;
     public GameObject target;
@@ -27,7 +28,7 @@ public class MissileMove : MonoBehaviour {
     public AudioSource expSound;
     public AudioSource hitSound;
 
-
+    float startTime;
 
     void Start()
     {
@@ -39,21 +40,32 @@ public class MissileMove : MonoBehaviour {
         rigid.AddForce(transform.up * initialSpeed);
         MissileTrail = GameObject.FindGameObjectsWithTag("MissileTrail");
         newMissileTrail = Instantiate(MissileTrail[0], transform.position, transform.rotation) as GameObject;
-
+//        newMissileTrail.SetActive(false);
+        startTime = Time.time;
     }
 
     void FixedUpdate()
     {
-        Vector3 direction = target.transform.position - transform.position;
-        direction.Normalize();
+        if (Time.time - startTime > 0.5 * delayTime)
+        {
 
-        angle = Vector3.Cross(direction, transform.up).z;
-        rigid.angularVelocity = new Vector3(0f, 0f, -angle * rotateSpeed);
-        rigid.AddForce(transform.up * bulletSpeed);
+            Vector3 direction = target.transform.position - transform.position;
+            direction.Normalize();
+
+            angle = Vector3.Cross(direction, transform.up).z;
+            rigid.angularVelocity = new Vector3(0f, 0f, -angle * rotateSpeed);
+        }
+
+        
         newMissileTrail.transform.position = transform.position - 1.5f * transform.up;
+        if(Time.time - startTime > delayTime)
+        {
+            rigid.AddForce(transform.up * (Time.time - startTime) * bulletSpeed);
+        }
+        
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "wall")
         {
@@ -64,7 +76,7 @@ public class MissileMove : MonoBehaviour {
 
             CameraShaker.Instance.ShakeOnce(1.5f, 4f, 0f, 1.5f);
             //comeFrom.SendMessage("SetAmmo", 1f);
-            if (!hit)
+ //           if (!hit)
             {
                 comeFrom.SendMessage("SetAmmo", 1f);
                 hit = true;
@@ -84,7 +96,7 @@ public class MissileMove : MonoBehaviour {
 
             CameraShaker.Instance.ShakeOnce(3f, 20f, 0f, 1f);
 
-            if (!hit)
+//            if (!hit)
             {
                 other.transform.parent.SendMessage("SetLife", -1);
                 comeFrom.SendMessage("SetAmmo", 1f);
