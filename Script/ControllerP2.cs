@@ -72,7 +72,7 @@ public class ControllerP2 : MonoBehaviour
         isMulti = false;
         isMissile = true;
         audioR.Play();
-        special = 5;
+        special = 3;
 
     }
 
