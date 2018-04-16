@@ -116,7 +116,7 @@ public class controllerP1 : MonoBehaviour
 
         float h_axis = Input.GetAxis("Horizontal");
 
-
+        Vector3 recoil = 25.0f * -direction;
 
         rigid.velocity = new Vector3(Accelrate * h_axis, 0f, 0f);
         if(h_axis != 0)
@@ -160,7 +160,8 @@ public class controllerP1 : MonoBehaviour
                     newBullet2.SendMessage("SetMulti", true);
 
                     //CameraShaker.Instance.ShakeOnce(2f, 4f, 0f, 1.5f);
-                    CameraShaker.Instance.ShakeOnce(1.5f, 4f, 0f, 1.5f);
+                    //CameraShaker.Instance.ShakeOnce(1.5f, 4f, 0f, 1.5f);
+                    rigid.AddForce(1.5f * recoil, ForceMode.Impulse);
                     audioS.pitch = Random.Range(1f, 5f);
 
                 }
@@ -191,14 +192,16 @@ public class controllerP1 : MonoBehaviour
                             a.enabled = false;
                             newBullet.SendMessage("SetBig", true);
                             //CameraShaker.Instance.ShakeOnce(5f, 4f, 0f, 3f);
-                            CameraShaker.Instance.ShakeOnce(2.5f, 4f, 0f, 3f);
+                            //CameraShaker.Instance.ShakeOnce(2.5f, 4f, 0f, 3f);
+                            rigid.AddForce(2.0f * recoil, ForceMode.Impulse);
 
                         }
                         else
                         {
                             //CameraShaker.Instance.ShakeOnce(2f, 4f, 0f, 1.5f);
-                            CameraShaker.Instance.ShakeOnce(1.25f, 4f, 0f, 1.5f);
+                            //CameraShaker.Instance.ShakeOnce(1.25f, 4f, 0f, 1.5f);
                             audioS.pitch = Random.Range(1f, 5f);
+                            rigid.AddForce(recoil, ForceMode.Impulse);
 
                         }
                     }
