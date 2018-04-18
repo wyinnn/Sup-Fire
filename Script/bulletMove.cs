@@ -9,6 +9,7 @@ public class bulletMove : MonoBehaviour {
     public GameObject comeFrom;
     public bool isMulti;
     public bool isBig;
+    public bool isFrozen;//
 
     GameObject[] sparks;
     GameObject[] explosion;
@@ -37,6 +38,10 @@ public class bulletMove : MonoBehaviour {
     void SetBig(bool big)
     {
         isBig = big;
+    }
+    void SetFrozen(bool Frozen)//
+    {
+        isFrozen = Frozen;
     }
 
     void FixedUpdate () {
@@ -71,6 +76,11 @@ public class bulletMove : MonoBehaviour {
             if (isBig)
             {
                 newExplosion.transform.localScale = new Vector3(2f, 2f, 2f);
+            }
+            else if (isFrozen)//
+            {
+                other.transform.parent.SendMessage("Buff_Time", Time.time);
+
             }
             expSound.pitch = Random.Range(0.7f, 1.5f);
             expSound.Play();
